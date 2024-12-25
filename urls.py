@@ -1,14 +1,13 @@
-from django.urls import path
-from . import views
+from django.contrib import admin
+from django.urls import path, include
+from django.contrib.auth.views import LogoutView
+from website.views import sign_up, SignInView
 
 urlpatterns = [
-    path('', views.admin_dashboard, name='admin_dashboard'),
-    path('products/', views.manage_products, name='manage_products'),
-    path('products/add/', views.add_product, name='add_product'),
-    path('products/delete/<int:product_id>/', views.delete_product, name='delete_product'),
-    path('users/', views.manage_users, name='manage_users'),
-    path('users/add/', views.add_user, name='add_user'),
-    path('users/delete/<int:user_id>/', views.delete_user, name='delete_user'),
-    path('orders/', views.view_orders, name='view_orders'),
-    path('orders/update/<int:order_id>/', views.update_order_status, name='update_order_status'),
+    path('admin/', admin.site.urls),          # Admin Dashboard
+    path('', include('website.urls')),        # Public Website
+    path('dashboard/', include('dashboard.urls')), 
+    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
+    path('signup/', sign_up, name='sign_up'),
+    path('signin/', SignInView.as_view(), name='sign_in'),
 ]
